@@ -8,8 +8,8 @@ export default function CartItemCard() {
                 <img src="https://via.placeholder.com/100" alt="product image" />
             </figure>
 
-            <div className="ml-2 w-full flex flex-col">
-                <h5 className="text-ellipsis w-full text-sm mb-1">Lorem ipsum dolor sit amet askjkj</h5>
+            <div className="ml-2 w-full flex flex-col relative">
+                <p className="text-ellipsis w-full text-sm mb-1">Lorem ipsum dolor</p>
                 <div className="flex justify-between items-end w-full">
                     <small>
                         <strong>

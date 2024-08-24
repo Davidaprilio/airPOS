@@ -21,32 +21,35 @@ import { IconType } from "react-icons"
 import { ScrollArea } from "@/Components/ui/scroll-area"
 import { TopBar } from "@/Components/pos/templates/TobBar"
 import SideBarCart from "@/Components/pos/templates/SideBarCart"
+import { TooltipProvider } from "@/Components/ui/tooltip"
 
 
 export default function Main() {
     return (
-        <div className="relative h-screen">
-            <TopBar />
-            <div className="flex h-full pt-12 bg-zinc-50">
-                <div className="pt-2 overflow-hiddens">
-                    <div className="flex px-12">
-                        <MenubarDemo />
-                    </div>
-                    <ScrollArea className="h-[calc(100vh-96px)] px-10 pt-3 z-0">
-                        <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-zinc-50 to-transparent from-70% to-100% w-full h-5 z-30"></div>
-
-                        <div className="w-full flex flex-row flex-wrap mb-4">
-                            {arrFrom(32, i => (
-                                <div className="p-2">
-                                    <CardProduct key={i} />
-                                </div>
-                            ))}
+        <TooltipProvider>
+            <div className="relative h-screen">
+                <TopBar />
+                <div className="flex h-full pt-12 bg-zinc-50">
+                    <div className="pt-2 overflow-hiddens">
+                        <div className="flex px-12">
+                            <MenubarDemo />
                         </div>
-                    </ScrollArea>
+                        <ScrollArea className="h-[calc(100vh-96px)] px-10 pt-3 z-0">
+                            <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-zinc-50 to-transparent from-70% to-100% w-full h-5 z-30"></div>
+
+                            <div className="w-full flex flex-row flex-wrap mb-4">
+                                {arrFrom(32, i => (
+                                    <div className="p-2">
+                                        <CardProduct key={i} />
+                                    </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    </div>
+                    <SideBarCart />
                 </div>
-                <SideBarCart />
             </div>
-        </div>
+        </TooltipProvider>
     )
 }
 
