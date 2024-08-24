@@ -62,6 +62,7 @@ export default {
       },
       fontFamily: {
         sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+        roboto: ['Roboto', ...defaultTheme.fontFamily.sans]
       },
       keyframes: {
         "accordion-down": {

@@ -1,199 +1,167 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
-import { TbLayoutSidebarLeftExpand } from "react-icons/tb"
-
-
 import {
-    Calculator,
-    Calendar,
-    CreditCard,
-    Settings,
-    Smile,
-    User,
-} from "lucide-react"
-
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-    CommandShortcut,
-} from "@/Components/ui/command"
+    Menubar,
+    MenubarCheckboxItem,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarRadioGroup,
+    MenubarRadioItem,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarSub,
+    MenubarSubContent,
+    MenubarSubTrigger,
+    MenubarTrigger,
+} from "@/Components/ui/menubar"
 import { Button } from "@/Components/ui/button"
-import { useEffect, useState } from "react"
-import { arrFrom, cn } from "@/lib/utils"
-import { RiArrowDownWideLine } from "react-icons/ri"
+import { useState } from "react"
+import { arrFrom } from "@/lib/utils"
 import { FaMinus, FaPlus } from "react-icons/fa6"
 import { IconType } from "react-icons"
 import { ScrollArea } from "@/Components/ui/scroll-area"
+import { TopBar } from "@/Components/pos/templates/TobBar"
+import SideBarCart from "@/Components/pos/templates/SideBarCart"
 
 
 export default function Main() {
     return (
         <div className="relative h-screen">
             <TopBar />
-            <div className="flex h-full pt-12">
-                <div className="w-full">
-                    e
-                </div>
-                <SidebarCart />
-            </div>
-        </div>
-    )
-}
-
-
-
-function TopBar() {
-    return (
-        <div className="border-b border-gray-300 bg-white shadow-sm px-3 py-1 w-full flex justify-center items-center gap-x-3 fixed">
-            <div className="flex gap-x-3">
-                <Button size='icon' variant='outline' className="p-0">
-                    <TbLayoutSidebarLeftExpand className="text-2xl m-1" />
-                </Button>
-
-                <CommandDemo />
-            
-                <div className="flex items-center gap-x-2 cursor-pointer">
-                    <div>
-                        <RiArrowDownWideLine />
+            <div className="flex h-full pt-12 bg-zinc-50">
+                <div className="pt-2 overflow-hiddens">
+                    <div className="flex px-12">
+                        <MenubarDemo />
                     </div>
-                    <MenuTobBar label="customer" text="Walk Customer" />
-                </div>
+                    <ScrollArea className="h-[calc(100vh-96px)] px-10 pt-3 z-0">
+                        <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-zinc-50 to-transparent from-70% to-100% w-full h-5 z-30"></div>
 
-                <div className="flex items-center gap-x-2 cursor-pointer">
-                    <MenuTobBar label="hold" text="Transaction" />
+                        <div className="w-full flex flex-row flex-wrap mb-4">
+                            {arrFrom(32, i => (
+                                <div className="p-2">
+                                    <CardProduct key={i} />
+                                </div>
+                            ))}
+                        </div>
+                    </ScrollArea>
                 </div>
+                <SideBarCart />
             </div>
-
-            <div className="w-full"></div>
-            <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-        </div>
-    )
-}
-
-function MenuTobBar({label, text}: {label: string, text: string}) {
-    return (
-        <div className="flex flex-col text-nowrap">
-            <div className="-mb-2 text-sm text-gray-600 font-medium">{label}</div>
-            <strong className="text-gray-700">{text}</strong>
-        </div>
-    )
-}
-
-function SumaryInfoText({label, value, className}: {label: string, value: string, className?: string}) {
-    return (
-        <div className="flex justify-between text-primary">
-            <strong className={cn("text-sm", className)}>{label}</strong>
-            <span><sup className="mr-1">Rp</sup>{value}</span>
-        </div>
-    )
-}
-
-function SidebarCart() {
-    return (
-        <div className="border-l min-w-[350px] px-5 py-3 relative flex flex-col pb-10">
-            <ScrollArea className="mb-5 pr-4 -mr-2">
-                <div className="flex flex-col gap-y-2">
-                    {arrFrom(15, i => (
-                        <CartItem  key={i} />
-                    ))}
-                </div>
-            </ScrollArea>
-
-            <div className="bg-secondary p-4 rounded-xl my-6 relative mt-auto">
-                <div className="bg-white rounded-full w-7 h-7 absolute bottom-11 -left-3.5"></div>
-                <div className="bg-white rounded-full w-7 h-7 absolute bottom-11 -right-3.5"></div>
-                <SumaryInfoText label="Total" value="75.000" />
-                <SumaryInfoText label="Discount" value="-5.000" />
-                <SumaryInfoText label="Tax" value="500" />
-                <hr className="my-3 border-dashed border-b-2 border-0" />
-                <SumaryInfoText label="Total" value="70.500" className="text-lg" />
-            </div>
-
-            <Button className="mx-auto bg-primary w-full">
-                Continue to payment
-            </Button>
-        </div>
-    )
-}
-
-function CommandDemo() {
-    const [open, setOpen] = useState(false)
-    return (
-        <div className="relative md:min-w-[450px]">
-            <Command 
-                onBlur={() => {setOpen(false)}}
-                onFocus={() => {setOpen(true)}}
-                className={cn("rounded-lg border w-full absolute h-fit", {
-                    'shadow-md': open
-                })}
-            >
-                <CommandInput placeholder="Search name or serial number ..." className="h-[2.4rem]" />
-                {open && (
-                    <CommandList className="border-t w-full bottom-10 bg-white ">
-                        <CommandEmpty>No results found.</CommandEmpty>
-                        <CommandGroup heading="Suggestions">
-                            <CommandItem>
-                                <Calendar className="mr-2 h-4 w-4" />
-                                <span>Calendar</span>
-                            </CommandItem>
-                            <CommandItem>
-                                <Smile className="mr-2 h-4 w-4" />
-                                <span>Search Emoji</span>
-                            </CommandItem>
-                            <CommandItem disabled>
-                                <Calculator className="mr-2 h-4 w-4" />
-                                <span>Calculator</span>
-                            </CommandItem>
-                        </CommandGroup>
-                        <CommandSeparator />
-                        <CommandGroup heading="Settings">
-                            <CommandItem>
-                                <User className="mr-2 h-4 w-4" />
-                                <span>Profile</span>
-                                <CommandShortcut>⌘P</CommandShortcut>
-                            </CommandItem>
-                            <CommandItem>
-                                <CreditCard className="mr-2 h-4 w-4" />
-                                <span>Billing</span>
-                                <CommandShortcut>⌘B</CommandShortcut>
-                            </CommandItem>
-                            <CommandItem>
-                                <Settings className="mr-2 h-4 w-4" />
-                                <span>Settings</span>
-                                <CommandShortcut>⌘S</CommandShortcut>
-                            </CommandItem>
-                        </CommandGroup>
-                    </CommandList>
-                )}
-            </Command>
         </div>
     )
 }
 
 
-function CartItem() {
+function CardProduct() {
     return (
-        <div className="flex items-center w-full">
-            <figure className="rounded-xl overflow-hidden aspect-square w-16">
-                <img src="https://via.placeholder.com/100" alt="product image" />
+        <div className="p-2 rounded-xl shadow-md bg-white relative z-0 cursor-pointer">
+            <img src="https://via.placeholder.com/150" alt="product image" className="aspect-[16/11] overflow-hidden w-full object-cover rounded-lg" />
+            <figure >
             </figure>
-
-            <div className="ml-2 w-full">
-                <h5>Lorem ipsum dolor sit amet</h5>
-                <div className="flex justify-between items-end w-full">
-                    <small><sup>Rp</sup> 10.000</small>
-                    <Counter />
+            <div className="pt-2">
+                <h3 className="text-sm text-center">Burger Double Beef</h3>
+                <div className="text-xs py-2">
+                    <sup className="mr-0.5 z-0">Rp</sup>
+                    <span>15k</span>
+                    <span className="ml-0.5">/pcs</span>
                 </div>
-            </div>
 
+                <Button className="h-7 w-full bg-primary">
+                    Add to cart
+                </Button>
+            </div>
         </div>
+    )
+}
+
+function MenubarDemo() {
+    return (
+        <Menubar>
+            <MenubarMenu>
+                <MenubarTrigger>File</MenubarTrigger>
+                <MenubarContent>
+                    <MenubarItem>
+                        New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem>
+                        New Window <MenubarShortcut>⌘N</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem disabled>New Incognito Window</MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarSub>
+                        <MenubarSubTrigger>Share</MenubarSubTrigger>
+                        <MenubarSubContent>
+                            <MenubarItem>Email link</MenubarItem>
+                            <MenubarItem>Messages</MenubarItem>
+                            <MenubarItem>Notes</MenubarItem>
+                        </MenubarSubContent>
+                    </MenubarSub>
+                    <MenubarSeparator />
+                    <MenubarItem>
+                        Print... <MenubarShortcut>⌘P</MenubarShortcut>
+                    </MenubarItem>
+                </MenubarContent>
+            </MenubarMenu>
+            <MenubarMenu>
+                <MenubarTrigger>Edit</MenubarTrigger>
+                <MenubarContent>
+                    <MenubarItem>
+                        Undo <MenubarShortcut>⌘Z</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem>
+                        Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarSub>
+                        <MenubarSubTrigger>Find</MenubarSubTrigger>
+                        <MenubarSubContent>
+                            <MenubarItem>Search the web</MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem>Find...</MenubarItem>
+                            <MenubarItem>Find Next</MenubarItem>
+                            <MenubarItem>Find Previous</MenubarItem>
+                        </MenubarSubContent>
+                    </MenubarSub>
+                    <MenubarSeparator />
+                    <MenubarItem>Cut</MenubarItem>
+                    <MenubarItem>Copy</MenubarItem>
+                    <MenubarItem>Paste</MenubarItem>
+                </MenubarContent>
+            </MenubarMenu>
+            <MenubarMenu>
+                <MenubarTrigger>View</MenubarTrigger>
+                <MenubarContent>
+                    <MenubarCheckboxItem>Always Show Bookmarks Bar</MenubarCheckboxItem>
+                    <MenubarCheckboxItem checked>
+                        Always Show Full URLs
+                    </MenubarCheckboxItem>
+                    <MenubarSeparator />
+                    <MenubarItem inset>
+                        Reload <MenubarShortcut>⌘R</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem disabled inset>
+                        Force Reload <MenubarShortcut>⇧⌘R</MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem inset>Toggle Fullscreen</MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem inset>Hide Sidebar</MenubarItem>
+                </MenubarContent>
+            </MenubarMenu>
+            <MenubarMenu>
+                <MenubarTrigger>Profiles</MenubarTrigger>
+                <MenubarContent>
+                    <MenubarRadioGroup value="benoit">
+                        <MenubarRadioItem value="andy">Andy</MenubarRadioItem>
+                        <MenubarRadioItem value="benoit">Benoit</MenubarRadioItem>
+                        <MenubarRadioItem value="Luis">Luis</MenubarRadioItem>
+                    </MenubarRadioGroup>
+                    <MenubarSeparator />
+                    <MenubarItem inset>Edit...</MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem inset>Add Profile...</MenubarItem>
+                </MenubarContent>
+            </MenubarMenu>
+        </Menubar>
     )
 }
 
@@ -201,17 +169,17 @@ function Counter() {
     const [count, setCount] = useState(1)
     return (
         <div className="flex items-center">
-            <CounterBtn Icon={FaPlus} onClick={() => setCount(v => v+1)} />
+            <CounterBtn Icon={FaMinus} onClick={() => setCount(v => Math.max(0, v - 1))} />
             <div className="w-10 text-center">{count}</div>
-            <CounterBtn Icon={FaMinus} onClick={() => setCount(v => Math.max(0, v-1))} />
+            <CounterBtn Icon={FaPlus} onClick={() => setCount(v => v + 1)} />
         </div>
     )
 }
 
-function CounterBtn({Icon, onClick}: {Icon: IconType, onClick: () => void }) {
+function CounterBtn({ Icon, onClick }: { Icon: IconType, onClick: () => void }) {
     return (
-        <Button variant='outline' className="w-7 h-7 p-0 text-gray-800" onClick={onClick}>
+        <Button variant='outline' className="w-6 h-6 p-0 text-gray-800" onClick={onClick}>
             <Icon />
-        </Button>   
+        </Button>
     )
 }
