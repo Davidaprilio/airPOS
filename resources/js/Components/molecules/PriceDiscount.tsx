@@ -1,8 +1,8 @@
 import Price from "@/Components/atoms/Price"
 
 export default function PriceDiscount({value, discount, currency = 'Rp'}: {
-    value: string
-    discount?: string
+    value: number
+    discount?: number
     currency?: string
 }) {
     return (

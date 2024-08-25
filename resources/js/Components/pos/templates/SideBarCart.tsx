@@ -6,8 +6,12 @@ import CartItemCard from "@/Components/pos/organisms/CartItemCard";
 import { HiOutlineTrash } from "react-icons/hi2";
 import { LiaSave } from "react-icons/lia";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip";
+import usePOSCartStore from "@/states/store/usePOSCartStore";
 
 export default function SideBarCart() {
+
+    const { cart } = usePOSCartStore()
+
     return (
         <div className="border-l min-w-[350px] px-5 py-3 relative flex flex-col pb-10 bg-white">
             <div className="flex justify-between mb-2">
@@ -21,7 +25,7 @@ export default function SideBarCart() {
                         <p>Hold Transaction</p>
                     </TooltipContent>
                 </Tooltip>
-                <h5>Cart detail (5)</h5>
+                <h5>Cart detail ({cart.size})</h5>
 
                 <Tooltip delayDuration={100}>
                     <TooltipTrigger>
@@ -35,10 +39,10 @@ export default function SideBarCart() {
                 </Tooltip>
             </div>
 
-            <ScrollArea className="mb-5 pr-4 -mr-4">
+            <ScrollArea scrollHideDelay={200} className="mb-5 pr-4 -mr-4">
                 <div className="flex flex-col gap-y-2 w-full">
-                    {arrFrom(15, i => (
-                        <CartItemCard key={i} />
+                    {Array.from(cart, ([id, item], i) => (
+                        <CartItemCard key={i} item={item} />
                     ))}
                 </div>
             </ScrollArea>
