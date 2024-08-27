@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('customer_id')->constrained('customers')->comment('all member have customer data');
+            $table->foreignUuid('customer_id')->constrained('customers')->comment('all member have customer data');
             $table->foreignId('busines_id')->constrained('busineses')->cascadeOnUpdate();
             $table->foreignId('store_id')->constrained('stores')->cascadeOnUpdate();
             $table->foreignId('member_type_id')->constrained('member_types')->cascadeOnUpdate();

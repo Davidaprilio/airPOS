@@ -11,15 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('purchase_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignId('busines_id')->constrained('busineses')->cascadeOnUpdate();
-            $table->foreignId('partner_id')->constrained('partners')->cascadeOnUpdate();
+            $table->foreignUuid('purchase_id');
+            $table->foreignId('product_id');
+            $table->foreignId('unit_id');
 
-            $table->string('name');
-            $table->string('email', 100)->nullable();
-            $table->string('phone', 16)->nullable();
-            $table->foreignId('member_id')->nullable(); // has one denormalize
+            $table->string('unit_name');
+            $table->string('product_name');
+
+            $table->float('qty');
+            $table->float('price');
+            $table->float('price_total');
+            $table->float('discount_total');
 
             $table->actionByUser(softDelete: true);
             $table->softDeletes();
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('purchase_items');
     }
 };
