@@ -28,7 +28,7 @@ return new class extends Migration
         });
 
         Schema::table($tableNames['roles'], function(Blueprint $table) {
-            $table->foreignId('store_id')->after('busines_id')->constrained('stores')->cascadeOnDelete();
+            $table->foreignId('store_id')->nullable()->after('busines_id')->constrained('stores')->cascadeOnDelete();
         });
     }
 

@@ -28,7 +28,7 @@ return new class extends Migration
         });
 
         Schema::table($tableNames['roles'], function(Blueprint $table) {
-            $table->foreignId('busines_id')->after('editable')->constrained('busineses')->cascadeOnDelete();
+            $table->foreignId('busines_id')->nullable()->after('editable')->constrained('busineses')->cascadeOnDelete();
         });
     }
 
