@@ -11,5 +11,26 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
+    errors: {[k:string]: string[]}
     ziggy: Config & { location: string };
 };
+
+export type Paginate<T extends Record<string, unknown>> = {
+    current_page: number
+    data: T[]
+    first_page_url: string
+    from: number
+    last_page: number
+    last_page_url: string
+    links: {
+        active: boolean
+        label: string
+        url: string
+    }[]
+    next_page_url: string
+    path: string
+    per_page: number
+    prev_page_url: null
+    to: number
+    total: number
+}
