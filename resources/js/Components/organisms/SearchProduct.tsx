@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/Components/ui/button"
 import { TiArrowSortedDown } from "react-icons/ti"
 
-const products = [
+export const products = [
     {
         category: "Makanan",
         products: [
@@ -113,7 +113,7 @@ function SearchProductItem({name, serialNum, unit}: {
     )
 }
 
-function ProductPreviewImg() {
+export function ProductPreviewImg() {
     return (
         <figure className="rounded overflow-hidden w-8 aspect-square">
             <img src="https://via.placeholder.com/50" alt="product image" />
