@@ -26,8 +26,8 @@ export default function Sidebar() {
     }, [open])
 
     return (
-        <div className={cn("border-r px-3 pt-16 max-w-[250px] min-w-52 w-full h-screen transition-transform", {
-            "-translate-x-96 w-0 min-w-0 p-0": !open
+        <div className={cn("border-r bg-white transition-all duration-200 overflow-hidden p-0 h-screen w-0 min-w-0 max-w-[250px] absolute md:relative z-40 shadow-xl md:shadow-none", {
+            "min-w-52 w-full px-3 pt-16": open
         })}>
             <Select value="userid_1">
                 <SelectTrigger className="w-full rounded-lg h-fit border p-1.5">
