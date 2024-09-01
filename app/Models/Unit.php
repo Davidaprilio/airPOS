@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Blameable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Unit extends Model
 {
@@ -18,4 +19,14 @@ class Unit extends Model
 
     protected $guarded = ['id'];
 
+    function casts(): array
+    {
+        return [
+            'is_universal' => 'boolean'
+        ];
+    }
+
+    function parent(): BelongsTo {
+        return $this->belongsTo(related: Unit::class, foreignKey: 'parent_unit_id');
+    }
 }
