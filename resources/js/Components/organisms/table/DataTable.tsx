@@ -1,20 +1,28 @@
-import { Button } from "@/Components/ui/button";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu";
-import { Input } from "@/Components/ui/input";
+import { DataTablePagination } from "@/Components/molecules/tables/DataTablePagination";
+import { DataTableToolbar, DataTableToolbarProps } from "@/Components/molecules/tables/DataTableToolbar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, OnChangeFn, PaginationState, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
 import { PiEmptyLight } from "react-icons/pi";
 
-export function DataTable<T>({ data, total, pagination, isLoading = true, columns, onPaginationChange }: {
+export function DataTable<T>({ data, total, pagination, isLoading = true, columns, onPaginationChange, classNames: cns, filters, search, setSearch }: {
     data: T[];
     columns: ColumnDef<T>[];
     onPaginationChange: OnChangeFn<PaginationState>
     pagination: PaginationState
     isLoading: boolean
     total: number
+    classNames?: {
+        thead?: string
+        tbody?: string
+        tr?: string
+        th?: string
+        td?: string
+    }
+    filters?: DataTableToolbarProps<T>['filters']
+    setSearch?: React.Dispatch<React.SetStateAction<string>>
+    search?: string
 }) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
@@ -47,49 +55,21 @@ export function DataTable<T>({ data, total, pagination, isLoading = true, column
     })
 
     return (
-        <div className="w-full">
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Cari ..."
-                    // value={}
-                    // onChange={}
-                    className="max-w-sm"
-                />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
+        <div className="w-full space-y-4">
+            <DataTableToolbar 
+                table={table} 
+                filters={filters} 
+                search={search} 
+                onSearch={async (keyword) => setSearch && setSearch(keyword)} 
+            />
             <div className="rounded-md border">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className={cns?.thead}>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
+                            <TableRow key={headerGroup.id} className={cns?.tr}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id}>
+                                        <TableHead key={header.id} className={cns?.th}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -102,9 +82,9 @@ export function DataTable<T>({ data, total, pagination, isLoading = true, column
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className={cns?.tbody}>
                         {isLoading ? (
-                            <TableRow>
+                            <TableRow className={cns?.tr}>
                                 <TableCell colSpan={columns.length}>
                                     <div className='w-full flex justify-center items-center text-xl bold text-gray-600 gap-x-3 py-16'>
                                         <ImSpinner10 className='animate-spin' />
@@ -116,12 +96,13 @@ export function DataTable<T>({ data, total, pagination, isLoading = true, column
                             <>
                             {table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
-                                    <TableRow
+                                    <TableRow 
+                                        className={cns?.tr}
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
                                     >
                                         {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id}>
+                                            <TableCell key={cell.id} className={cns?.td}>
                                                 {flexRender(
                                                     cell.column.columnDef.cell,
                                                     cell.getContext()
@@ -131,14 +112,12 @@ export function DataTable<T>({ data, total, pagination, isLoading = true, column
                                     </TableRow>
                                 ))
                             ) : (
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 flex text-center justify-center items-center gap-x-4 py-16 text-xl bold text-gray-600"
-                                    >
-                                        <PiEmptyLight />
-
-                                        No results.
+                                <TableRow className={cns?.tr}>
+                                    <TableCell colSpan={columns.length}>
+                                        <div className="flex text-center justify-center items-center gap-x-4 py-16 text-xl bold text-gray-600 w-full">
+                                            <PiEmptyLight />
+                                            No results.
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -147,30 +126,7 @@ export function DataTable<T>({ data, total, pagination, isLoading = true, column
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        // disabled={!table.getCanNextPage()}
-                    >
-                        Next
-                    </Button>
-                </div>
-            </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }

@@ -21,14 +21,16 @@ import {
 } from "@/Components/ui/popover"
 import { Separator } from "@/Components/ui/separator"
 
+export interface DataTableFacetedFilterOption {
+    label: string
+    value: string
+    icon?: React.ComponentType<{ className?: string }>
+}
+
 interface DataTableFacetedFilterProps<TData, TValue> {
     column?: Column<TData, TValue>
     title?: string
-    options: {
-        label: string
-        value: string
-        icon?: React.ComponentType<{ className?: string }>
-    }[]
+    options: DataTableFacetedFilterOption[]
 }
 
 export function DataTableFacetedFilter<TData, TValue>({

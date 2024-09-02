@@ -1,11 +1,13 @@
 import { PaginationState } from "@tanstack/react-table";
 import { useState } from "react";
 
+const initialValue = {
+    pageSize: 15,
+    pageIndex: 0,
+}
+
 export function usePagination() {
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageSize: 15,
-        pageIndex: 0,
-    });
+    const [pagination, setPagination] = useState<PaginationState>(initialValue);
     const { pageSize, pageIndex } = pagination;
 
     return {
@@ -13,6 +15,9 @@ export function usePagination() {
         onPaginationChange: setPagination,
         pagination,
         skip: pageSize * pageIndex,
-        page: pageIndex + 1
+        page: pageIndex + 1,
+        reset: () => {
+            setPagination(initialValue)
+        }
     };
 }
