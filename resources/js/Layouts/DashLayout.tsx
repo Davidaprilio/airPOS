@@ -2,6 +2,8 @@ import Navbar from "@/Components/organisms/dash/Navbar"
 import Sidebar, { sidebarState } from "@/Components/organisms/dash/Sidebar"
 import { stateOpenSearchBar } from "@/Components/organisms/SearchProduct";
 import { ScrollArea, ScrollBar } from "@/Components/ui/scroll-area"
+import { Toaster } from "@/Components/ui/sonner";
+import useTheme from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { Head, router } from "@inertiajs/react";
 import { PropsWithChildren } from "react"
@@ -15,6 +17,7 @@ type DashLayoutProps = PropsWithChildren<{
 export default function DashLayout({children, title}: DashLayoutProps) {
     const [isOpenSearchBar, setOpenSearchBar] = useRecoilState(stateOpenSearchBar)
     const [isSidebarOpen] = useRecoilState(sidebarState)
+    const {theme} = useTheme()
 
     return (
         <>
@@ -49,6 +52,8 @@ export default function DashLayout({children, title}: DashLayoutProps) {
                     </ScrollArea>
                 </div>
             </div>
+
+            <Toaster richColors position="top-center" theme={theme} />
         </>
     )
 }
