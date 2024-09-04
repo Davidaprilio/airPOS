@@ -1,13 +1,32 @@
 import { DataTablePagination } from "@/Components/molecules/tables/DataTablePagination";
 import { DataTableToolbar, DataTableToolbarProps } from "@/Components/molecules/tables/DataTableToolbar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
-import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, OnChangeFn, PaginationState, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
+import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, OnChangeFn, PaginationState, RowSelectionState, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
 import { useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
 import { PiEmptyLight } from "react-icons/pi";
 
-export function DataTable<T>({ data, total, pagination, isLoading = true, columns, onPaginationChange, classNames: cns, filters, search, setSearch }: {
+export function DataTable<T extends Record<string, any>>({
+    data,
+    total,
+    pagination,
+    isLoading = true,
+    columns,
+    onPaginationChange,
+    classNames: cns,
+    filters,
+    search,
+    setSearch,
+    sorting,
+    setSorting,
+    setColumnFilters,
+    columnFilters,
+    setRowSelection,
+    rowSelection,
+    setRowId,
+}: {
     data: T[];
+    setRowId?: (row: T) => string
     columns: ColumnDef<T>[];
     onPaginationChange: OnChangeFn<PaginationState>
     pagination: PaginationState
@@ -23,13 +42,14 @@ export function DataTable<T>({ data, total, pagination, isLoading = true, column
     filters?: DataTableToolbarProps<T>['filters']
     setSearch?: React.Dispatch<React.SetStateAction<string>>
     search?: string
-}) {
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-        []
-    )
+    setSorting?: React.Dispatch<React.SetStateAction<SortingState>>
+    sorting?: SortingState
+    setColumnFilters?: React.Dispatch<React.SetStateAction<ColumnFiltersState>>
+    columnFilters?: ColumnFiltersState
+    setRowSelection?: React.Dispatch<React.SetStateAction<RowSelectionState>>
+    rowSelection?: RowSelectionState
+}) {    
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
 
     const table = useReactTable({
         data,
@@ -41,6 +61,7 @@ export function DataTable<T>({ data, total, pagination, isLoading = true, column
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
+        getRowId: (row, i) => setRowId ? setRowId(row) : i.toString(),
         onRowSelectionChange: setRowSelection,
         manualPagination: true,
         onPaginationChange,

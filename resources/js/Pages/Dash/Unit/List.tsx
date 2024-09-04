@@ -39,7 +39,7 @@ export const columns: ColumnDef<Unit>[] = [
                     table.getIsAllPageRowsSelected() ||
                     (table.getIsSomePageRowsSelected() && "indeterminate")
                 }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}       
                 aria-label="Select all"
             />
         ),
@@ -68,6 +68,7 @@ export const columns: ColumnDef<Unit>[] = [
         header: ({ column }) => <DataTableColumnHeader title="Simbol" column={column} />
     },
     {
+        id: 'type',
         accessorKey: "type unit",
         header: "Tipe",
         cell: ({ row: { original } }) => <span className='lowercase'>{original.type}</span>,
@@ -114,14 +115,17 @@ export const columns: ColumnDef<Unit>[] = [
 ]
 
 export default function List({}: PageProps<{}>) {
-    const {attrs} = useDataTable<Unit>('/api/units', {searchDebounceTime:1})
+    const {attrs} = useDataTable<Unit>('/api/units')
 
     return (
         <DashLayout title="Unit">
             <PageTitle>Satuan Dasar</PageTitle>
 
             <main>
-                <DataTable {...attrs} columns={columns} filters={[
+                <DataTable {...attrs} 
+                setRowId={row => row.id.toString()}
+                columns={columns} 
+                filters={[
                     {
                         columnId: 'symbol',
                         title: 'Simbol',
@@ -129,6 +133,16 @@ export default function List({}: PageProps<{}>) {
                             {
                                 label: 'mass',
                                 value: 'Mass',
+                            }
+                        ]
+                    },
+                    {
+                        columnId: 'type',
+                        title: 'Type',
+                        options: [
+                            {
+                                label: 'Volume',
+                                value: 'volume',
                             }
                         ]
                     }

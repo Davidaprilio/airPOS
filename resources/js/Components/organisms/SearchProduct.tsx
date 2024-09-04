@@ -3,6 +3,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { cn } from "@/lib/utils"
 import { Button } from "@/Components/ui/button"
 import { TiArrowSortedDown } from "react-icons/ti"
+import { atom, useRecoilState } from "recoil"
 
 export const products = [
     {
@@ -53,8 +54,14 @@ export const products = [
     }
 ]
 
+export const stateOpenSearchBar = atom({
+    key: 'stateOpenSearchBar',
+    default: false
+})
+
 export function SearchProduct() {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useRecoilState(stateOpenSearchBar)
+
     return (
         <div className="relative md:min-w-[450px] z-50">
             <Command
