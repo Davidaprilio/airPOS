@@ -3,7 +3,7 @@ import DashLayout from '@/Layouts/DashLayout'
 import { PageProps } from '@/types'
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import {
@@ -15,8 +15,10 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu"
 import { DataTable } from '@/Components/organisms/table/DataTable'
-import useDataTable from '@/hooks/useDataTable'
 import { DataTableColumnHeader } from '@/Components/molecules/tables/DataTableColumnHeader'
+import useDataTableApi from '@/hooks/useDataTableApi'
+import useDataTable from '@/hooks/useDataTable'
+import { useFetchDataTable } from '@/hooks/useFetchDataTable'
 export type Unit = {
     id: number
     is_universal: boolean
@@ -115,7 +117,9 @@ export const columns: ColumnDef<Unit>[] = [
 ]
 
 export default function List({}: PageProps<{}>) {
-    const {attrs} = useDataTable<Unit>('/api/units')
+    // const {attrs} = useDataTableApi<Unit>('/api/units')
+    const {attrs} = useDataTable()
+    const {data, isLoading, total} = useFetchDataTable<Unit>('/api/units?limit=100', {})
 
     return (
         <DashLayout title="Unit">
@@ -123,30 +127,34 @@ export default function List({}: PageProps<{}>) {
 
             <main>
                 <DataTable {...attrs} 
-                setRowId={row => row.id.toString()}
-                columns={columns} 
-                filters={[
-                    {
-                        columnId: 'symbol',
-                        title: 'Simbol',
-                        options: [
-                            {
-                                label: 'mass',
-                                value: 'Mass',
-                            }
-                        ]
-                    },
-                    {
-                        columnId: 'type',
-                        title: 'Type',
-                        options: [
-                            {
-                                label: 'Volume',
-                                value: 'volume',
-                            }
-                        ]
-                    }
-                ]} />
+                    data={data}
+                    total={total}
+                    isLoading={isLoading}
+                    setRowId={row => row.id.toString()}
+                    columns={columns} 
+                    filters={[
+                        {
+                            columnId: 'symbol',
+                            title: 'Simbol',
+                            options: [
+                                {
+                                    label: 'mass',
+                                    value: 'Mass',
+                                }
+                            ]
+                        },
+                        {
+                            columnId: 'type',
+                            title: 'Type',
+                            options: [
+                                {
+                                    label: 'Volume',
+                                    value: 'volume',
+                                }
+                            ]
+                        }
+                    ]} 
+                />
             </main>
         </DashLayout>
     )

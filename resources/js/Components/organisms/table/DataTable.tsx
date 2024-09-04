@@ -24,13 +24,15 @@ export function DataTable<T extends Record<string, any>>({
     setRowSelection,
     rowSelection,
     setRowId,
+    manualPagination = true,
+    globalFilter,
 }: {
     data: T[];
     setRowId?: (row: T) => string
     columns: ColumnDef<T>[];
     onPaginationChange: OnChangeFn<PaginationState>
     pagination: PaginationState
-    isLoading: boolean
+    isLoading?: boolean
     total: number
     classNames?: {
         thead?: string
@@ -48,6 +50,8 @@ export function DataTable<T extends Record<string, any>>({
     columnFilters?: ColumnFiltersState
     setRowSelection?: React.Dispatch<React.SetStateAction<RowSelectionState>>
     rowSelection?: RowSelectionState
+    manualPagination?: boolean
+    globalFilter?: string
 }) {    
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
@@ -63,10 +67,11 @@ export function DataTable<T extends Record<string, any>>({
         onColumnVisibilityChange: setColumnVisibility,
         getRowId: (row, i) => setRowId ? setRowId(row) : i.toString(),
         onRowSelectionChange: setRowSelection,
-        manualPagination: true,
+        manualPagination,
         onPaginationChange,
         rowCount: total,
         state: {
+            globalFilter,
             sorting,
             columnFilters,
             columnVisibility,
