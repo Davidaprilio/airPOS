@@ -72,7 +72,7 @@ class UnitRepo
         PaginateRequest $req,
         int $busines_id = null
     ) {
-        $units = Unit::with([
+        $qry = Unit::with([
             'parent' => fn($qry) => $qry->select('name', 'id')
         ])->select([
             'id',
@@ -85,7 +85,14 @@ class UnitRepo
         ])->where(function($q) use ($busines_id) {
             $q->where('is_universal', true);
             $q->where('busines_id', $busines_id);
-        })->paginate($req->getLimit());
+        });
+
+        $searchable = ['name', 'symbol'];
+        if($keyword = $req->getSearch()) {
+            $qry->search($searchable, "%{$keyword}%");
+        }
+
+        $units = $qry->paginate($req->getLimit());
 
         $units->setCollection(
             $units->getCollection()->map(function ($item) {

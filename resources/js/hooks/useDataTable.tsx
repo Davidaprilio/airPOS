@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePagination } from "./usePagination";
-import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import { ColumnFiltersState, PaginationState, SortingState } from "@tanstack/react-table";
+import { PageSizeOption } from "@/Components/molecules/tables/DataTablePagination";
 
-export default function useDataTable() {
-    const { limit, onPaginationChange, page, pagination, reset } = usePagination();
+export type HookDataTableOptions = {paginate?: PaginationState & {
+    pageSize: PageSizeOption
+}}
+
+export default function useDataTable(opt?: HookDataTableOptions) {
+    const { limit, onPaginationChange, page, pagination, reset } = usePagination(opt?.paginate);
     const [search, setSearch] = useState('')
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])

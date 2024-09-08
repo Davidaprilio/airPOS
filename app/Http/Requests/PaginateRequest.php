@@ -29,6 +29,14 @@ class PaginateRequest extends FormRequest
 
     public function getLimit(): int
     {
-        return $this->query('limit', $this->default_limit);
+        $limit =  $this->query('limit', null);
+        if ($limit === '0') return 9_999_999;
+        if ($limit === null) return $this->default_limit;
+        return $limit;
+    }
+
+    function getSearch(): ?string 
+    {
+        return $this->query('search', null);
     }
 }

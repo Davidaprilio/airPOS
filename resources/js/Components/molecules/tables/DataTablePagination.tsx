@@ -10,6 +10,9 @@ import {
 } from "@/Components/ui/select"
 import { RxChevronLeft, RxChevronRight, RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx"
 
+const limitListPaginate = [5, 10, 15, 20, 30, 50, 100, 200] as const
+
+export type PageSizeOption = typeof limitListPaginate[number]
 interface DataTablePaginationProps<TData> {
     table: Table<TData>
 }
@@ -27,7 +30,7 @@ export function DataTablePagination<TData>({
                 <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium">Rows per page</p>
                     <Select
-                        value={`${table.getState().pagination.pageSize}`}
+                        defaultValue={`${table.getState().pagination.pageSize}`}
                         onValueChange={(value) => {
                             table.setPageSize(Number(value))
                         }}
@@ -36,7 +39,7 @@ export function DataTablePagination<TData>({
                             <SelectValue placeholder={table.getState().pagination.pageSize} />
                         </SelectTrigger>
                         <SelectContent side="top">
-                            {[10, 15, 20, 30, 40, 50].map((pageSize) => (
+                            {limitListPaginate.map((pageSize) => (
                                 <SelectItem key={pageSize} value={`${pageSize}`}>
                                     {pageSize}
                                 </SelectItem>

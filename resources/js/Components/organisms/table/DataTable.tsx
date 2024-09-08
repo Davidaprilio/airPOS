@@ -1,6 +1,7 @@
 import { DataTablePagination } from "@/Components/molecules/tables/DataTablePagination";
 import { DataTableToolbar, DataTableToolbarProps } from "@/Components/molecules/tables/DataTableToolbar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
+import { cn } from "@/lib/utils";
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, OnChangeFn, PaginationState, RowSelectionState, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
 import { useState } from "react";
 import { ImSpinner10 } from "react-icons/im";
@@ -40,6 +41,9 @@ export function DataTable<T extends Record<string, any>>({
         tr?: string
         th?: string
         td?: string
+        tableWrapper?: string
+        toolbarWrapper?: string
+        footerWrapper?: string
     }
     filters?: DataTableToolbarProps<T>['filters']
     setSearch?: React.Dispatch<React.SetStateAction<string>>
@@ -81,14 +85,16 @@ export function DataTable<T extends Record<string, any>>({
     })
 
     return (
-        <div className="w-full space-y-4">
-            <DataTableToolbar 
-                table={table} 
-                filters={filters} 
-                search={search} 
-                onSearch={async (keyword) => setSearch && setSearch(keyword)} 
-            />
-            <div className="rounded-md border">
+        <div className="w-full space-y-2">
+            <div className={cns?.toolbarWrapper}>
+                <DataTableToolbar 
+                    table={table} 
+                    filters={filters} 
+                    search={search} 
+                    onSearch={async (keyword) => setSearch && setSearch(keyword)} 
+                />
+            </div>
+            <div className={cn("rounded-md border", cns?.tableWrapper)}>
                 <Table>
                     <TableHeader className={cns?.thead}>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -152,7 +158,9 @@ export function DataTable<T extends Record<string, any>>({
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} />
+            <div className={cns?.footerWrapper}>
+                <DataTablePagination table={table} />
+            </div>
         </div>
     )
 }

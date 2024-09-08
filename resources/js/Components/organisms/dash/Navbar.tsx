@@ -35,7 +35,7 @@ import { PropsWithChildren } from 'react';
 export default function Navbar() {
     const [open, setOpen] = useRecoilState(sidebarState)
     return (
-        <div className="fixed px-3 py-2 border-b w-full z-50 bg-white flex items-center justify-between">
+        <div className="fixed px-3 h-12 py-2 border-b w-full z-50 bg-white flex items-center justify-between">
             <Button variant='ghost' size='icon' className='w-8 h-8' onClick={() => setOpen(v => !v)}>
                 <GoSidebarCollapse className='text-xl' />
             </Button>

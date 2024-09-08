@@ -11,4 +11,9 @@ export default defineConfig({
         }),
         react(),
     ],
+    resolve: {
+        alias: {
+            'react-barcode-reader': '/node_modules/react-barcode-reader/src/index.js'
+        }
+    }
 });

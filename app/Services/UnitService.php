@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Exceptions\ClientError;
+use App\Http\Requests\PaginateRequest;
 use App\Repositories\UnitRepo;
 
 class UnitService
 {
-    static function convert(string $fromUnit, string $toUnit, float $value) {
+    static function convert(string $fromUnit, string $toUnit, float $value) 
+    {
         $unitFrom = UnitRepo::getUnitBySymbol($fromUnit);
         $unitTo = UnitRepo::getUnitBySymbol($toUnit);
         if ($unitFrom->type !== $unitTo->type) {
@@ -16,5 +18,11 @@ class UnitService
 
         $baseValue = $value * $unitFrom->conversion_factor;
         return round($baseValue / $unitTo->conversion_factor, 7);
+    }
+
+    static function getList(PaginateRequest $req) 
+    {
+        $units = UnitRepo::getListPagination($req);
+        return $units;
     }
 }

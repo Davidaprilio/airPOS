@@ -14,7 +14,7 @@ export type FetchApiOpt  = {
     sort?: SortingState
 }
 
-export function useFetchDataTable<T extends Record<string, unknown>>(url: string, opt: FetchApiOpt) {
+export function useFetchDataTable<T extends Record<string, unknown>>(url: string, opt: FetchApiOpt, onFinish?: () => Promise<void>|void) {
     const [isLoading, setIsLoading] = useState(false)
     const [data, setData] = useState<Paginate<T>>()
     
@@ -45,6 +45,7 @@ export function useFetchDataTable<T extends Record<string, unknown>>(url: string
                 toast.error('Unhadled Error')
             } finally {
                 setIsLoading(false)
+                onFinish && onFinish()
             }
         }
 
