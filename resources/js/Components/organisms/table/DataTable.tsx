@@ -15,6 +15,7 @@ export function DataTable<T extends Record<string, any>>({
     columns,
     onPaginationChange,
     classNames: cns,
+    className,
     filters,
     search,
     setSearch,
@@ -35,9 +36,11 @@ export function DataTable<T extends Record<string, any>>({
     pagination: PaginationState
     isLoading?: boolean
     total: number
+    className?: string
     classNames?: {
         thead?: string
         tbody?: string
+        trHead?: string
         tr?: string
         th?: string
         td?: string
@@ -85,7 +88,7 @@ export function DataTable<T extends Record<string, any>>({
     })
 
     return (
-        <div className="w-full space-y-2">
+        <div className={cn("w-full space-y-2", className)}>
             <div className={cns?.toolbarWrapper}>
                 <DataTableToolbar 
                     table={table} 
@@ -98,7 +101,7 @@ export function DataTable<T extends Record<string, any>>({
                 <Table>
                     <TableHeader className={cns?.thead}>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} className={cns?.tr}>
+                            <TableRow key={headerGroup.id} className={cns?.trHead}>
                                 {headerGroup.headers.map((header) => {
                                     return (
                                         <TableHead key={header.id} className={cns?.th}>

@@ -72,7 +72,9 @@ export default function Sidebar() {
 
                 <MenuItem icon={GoHome} href="/dashboard" label="Home" />
                 <MenuSection label="Kelola" />
-                <MenuItem icon={PiStorefrontDuotone} href="#" label="Toko" />
+                <MenuItem icon={PiStorefrontDuotone} label="Toko"
+                    href={route('store.index')}
+                />
                 <MenuItem icon={AiOutlineProduct} label="Produk" 
                     href={route('product.index')}
                     isActive={route().current('product.*')}

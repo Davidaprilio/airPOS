@@ -14,6 +14,7 @@ import {
     Plus,
     Settings,
     User,
+    User2Icon,
     Users,
 } from "lucide-react"
 
@@ -27,15 +28,18 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu"
-import {  SearchProduct } from '../SearchProduct';
+import { SearchProduct } from '../SearchProduct';
 import { Link, usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { PropsWithChildren } from 'react';
+import { FaArrowDown, FaArrowTurnDown, FaChevronDown, FaPlus } from 'react-icons/fa6';
+import { PiBellDuotone, PiBellRingingDuotone, PiStorefrontDuotone } from 'react-icons/pi';
+import { IconType } from 'react-icons';
 
 export default function Navbar() {
     const [open, setOpen] = useRecoilState(sidebarState)
     return (
-        <div className="fixed px-3 h-12 py-2 border-b w-full z-50 bg-white flex items-center justify-between">
+        <div className="absolute px-3 h-12 py-2 border-b w-full mx-full z-50 bg-white flex items-center justify-between">
             <Button variant='ghost' size='icon' className='w-8 h-8' onClick={() => setOpen(v => !v)}>
                 <GoSidebarCollapse className='text-xl' />
             </Button>
@@ -45,14 +49,64 @@ export default function Navbar() {
                 <SearchProduct />
             </div>
 
-            <DropdownMenuDemo />
+            <div className='flex gap-x-4'>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className='space-x-2'><FaChevronDown /> <span>Add</span></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 mr-10 mt-2">
+                        <DropdownMenuGroup>
+                            <ItemLinkAddDropdown icon={PiStorefrontDuotone} label='Toko' desc='Kelola toko dengan mudah' />
+                            <ItemLinkAddDropdown icon={User2Icon} label='User' desc='buat user lain untuk membantu' />
+                            <ItemLinkAddDropdown icon={User2Icon} label='User' desc='buat user lain untuk membantu' />
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className='-space-x-1 relative px-2'>
+                            <PiBellDuotone size={18} /> 
+                            {/* <PiBellRingingDuotone size={18} className='animate-wiggle duration-700' />  */}
+                            <span className='text-[9px] rounded-xl w-6 block -mt-2'>287</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 mr-10 mt-2">
+                        <DropdownMenuGroup>
+                            <ItemLinkAddDropdown icon={PiStorefrontDuotone} label='Toko' desc='Kelola toko dengan mudah' />
+                            <ItemLinkAddDropdown icon={User2Icon} label='User' desc='buat user lain untuk membantu' />
+                            <ItemLinkAddDropdown icon={User2Icon} label='User' desc='buat user lain untuk membantu' />
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenuAccount />
+            </div>
         </div>
     )
 }
 
+function ItemLinkAddDropdown(props: {
+    icon: IconType|React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
+    label: string
+    desc?: string
+    href?: string
+}) {
+    return (
+        <Link href={props.href ?? '#'}>
+            <DropdownMenuItem className='items-start cursor-pointer'>
+                <props.icon className="mr-2 h-4 w-4 mt-1" />
+                <div className='flex flex-col -space-y-1'>
+                    <span>{props.label}</span>
+                    {props.desc && (<small className='text-gray-600'>{props.desc}</small>)}
+                </div>
+            </DropdownMenuItem>
+        </Link>
+    )
+}
 
-export function DropdownMenuDemo() {
-    const {auth} = usePage<PageProps>().props
+export function DropdownMenuAccount() {
+    const { auth } = usePage<PageProps>().props
 
     return (
         <DropdownMenu>
@@ -73,8 +127,8 @@ export function DropdownMenuDemo() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItemLink icon={User} children='Profil'
-                        href={route('profile.edit')} 
-                        shortcut='Alt + P' 
+                        href={route('profile.edit')}
+                        shortcut='Alt + P'
                     />
                     <DropdownMenuItem>
                         <CreditCard className="mr-2 h-4 w-4" />
@@ -123,7 +177,7 @@ export function DropdownMenuDemo() {
     )
 }
 
-function DropdownMenuItemLink({href, children, shortcut, icon: Icon}: PropsWithChildren<{
+function DropdownMenuItemLink({ href, children, shortcut, icon: Icon }: PropsWithChildren<{
     icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
     href: string
     shortcut?: string

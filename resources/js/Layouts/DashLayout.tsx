@@ -1,3 +1,4 @@
+import Navbar from "@/Components/organisms/dash/Navbar";
 import Sidebar, { sidebarState } from "@/Components/organisms/dash/Sidebar"
 import { stateOpenSearchBar } from "@/Components/organisms/SearchProduct";
 import { ScrollArea, ScrollBar } from "@/Components/ui/scroll-area"
@@ -5,15 +6,18 @@ import { Toaster } from "@/Components/ui/sonner";
 import useTheme from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { Head, router } from "@inertiajs/react";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { PropsWithChildren, useEffect } from "react"
 import Hotkeys from 'react-hot-keys';
 import { useRecoilState } from "recoil";
 
 type DashLayoutProps = PropsWithChildren<{
     title?: string
+    withNav?: boolean
+    className?: string
 }>
 
-export default function DashLayout({ children, title }: DashLayoutProps) {
+export default function DashLayout({ children, title, withNav = true, className }: DashLayoutProps) {
     const [isOpenSearchBar, setOpenSearchBar] = useRecoilState(stateOpenSearchBar)
     const [isSidebarOpen, setSidebarOpen] = useRecoilState(sidebarState)
     const { theme } = useTheme()
@@ -21,7 +25,7 @@ export default function DashLayout({ children, title }: DashLayoutProps) {
     useEffect(() => {
         let open = isOpenSearchBar
         const handler = function (event: MouseEvent) {
-            const threshold = 10; // Misalnya, 50px dari sisi kiri
+            const threshold = 7; // Misalnya, 50px dari sisi kiri
             if (open === false && event.clientX <= threshold) {
                 console.log('Mouse berada di sisi kiri browser!');
                 // Tambahkan event atau logika lain di sini
@@ -53,19 +57,25 @@ export default function DashLayout({ children, title }: DashLayoutProps) {
 
             <Head title={title ?? 'Dashboard'} />
 
-            <div className="min-h-screen flex md:justify-between">
-                <Sidebar />
-                <div className={cn("overflow-hidden md:transition-all md:duration-300 md:ease-in-out w-full md:w-11/12", {
-                    'w-full md:w-full': !isSidebarOpen
-                })}>
-                    <ScrollArea className="h-screen w-full relative">
-                        <main className="w-full mx-auto mb-10">
-                            {children}
-                        </main>
-                        <ScrollBar orientation="horizontal" />
-                    </ScrollArea>
+            <TooltipProvider>
+                <div className="min-h-screen flex md:justify-between">
+                    <Sidebar />
+                    <div className={cn("overflow-hidden md:transition-all md:duration-300 md:ease-in-out w-full md:w-11/12 relative", {
+                        'w-full md:w-full': !isSidebarOpen
+                    })}>
+                        {withNav && (<Navbar />)}
+                        <ScrollArea className="h-screen w-full relative">
+                            <main className={cn("w-full mx-auto mb-10", {
+                                "pt-2.5": withNav,
+                                [`${className}`]: true
+                            })}>
+                                {children}
+                            </main>
+                            <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
+                    </div>
                 </div>
-            </div>
+            </TooltipProvider>
 
             <Toaster richColors position="top-center" theme={theme} />
         </>

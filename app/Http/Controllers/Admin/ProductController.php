@@ -29,6 +29,12 @@ class ProductController extends Controller
         return $request->all();
     }
 
+    function show() {
+        return inertia('Dash/Product/Show', [
+
+        ]);
+    }
+
     public function createProduct(Request $request)
     {
         ProductService::createNew($request);

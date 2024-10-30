@@ -7,13 +7,39 @@ import {
   FieldPath,
   FieldValues,
   FormProvider,
+  FormProviderProps,
   useFormContext,
 } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
 import { Label } from "@/Components/ui/label"
 
-const Form = FormProvider
+const Form = <TFieldValues extends FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined>({
+  children,
+  clearErrors, 
+  control,
+  formState,
+  getFieldState,
+  getValues,
+  handleSubmit,
+  reset,
+  register,
+  resetField,
+  setError,
+  setFocus,
+  setValue,
+  unregister,
+  trigger,
+  watch,
+  ...props
+}: FormProviderProps<TFieldValues, TContext, TTransformedValues> & React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>
+)  =>  {
+  return (
+    <FormProvider clearErrors={clearErrors} control={control} formState={formState} getFieldState={getFieldState} getValues={getValues} handleSubmit={handleSubmit} reset={reset} register={register} resetField={resetField} setError={setError} setFocus={setFocus} setValue={setValue} unregister={unregister} trigger={trigger} watch={watch}>
+      <form {...props}>{children}</form>
+    </FormProvider>
+  )
+}
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,

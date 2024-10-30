@@ -19,6 +19,7 @@ import { Label } from "@/Components/ui/label"
 import BarcodeReader from 'react-barcode-reader'
 import { FaAutoprefixer } from 'react-icons/fa6';
 import { cn } from '@/lib/utils';
+import FormInputField from '@/Components/organisms/forms/FormInputField';
 
 
 const FormSchema = z.object({
@@ -79,139 +80,86 @@ export default function Create() {
                 </div>
             </NavbarLayout>
 
-            <TooltipProvider>
-                <main className='p-5'>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef} className="w-full flex gap-x-6">
-                            <div className='max-w-32'>
-                                <Label>Image Product</Label>
-                                <div className='w-full aspect-square border shadow-md rounded-md p-2'>
+            <main className='p-5'>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} ref={formRef} className="w-full flex gap-x-6">
+                        <div className='max-w-32'>
+                            <Label>Image Product</Label>
+                            <div className='w-full aspect-square border shadow-md rounded-md p-2'>
 
-                                </div>
-
-                                <Button className='w-full bg-gray-700 mt-4' size='sm'>Unggah Foto</Button>
                             </div>
-                            <div className='w-full col-span-10 grid grid-cols-12 gap-x-2'>
-                                <FormField
-                                    control={form.control}
-                                    name="name"
-                                    render={({ field }) => (
-                                        <FormInput field={field} label='Nama' placeholder='Masukan nama produk' required />
-                                    )}
-                                />
 
-                                <FormField
-                                    control={form.control}
-                                    name="sku"
-                                    render={({ field }) => (
-                                        <FormInput 
-                                            field={field} 
-                                            label='SKU' 
-                                            placeholder='Kode SKU' 
-                                            required
-                                            buttonOnclick={() => {
-                                                form.setValue('sku', Math.random().toString())
-                                            }}
-                                            button={(
-                                                <FaAutoprefixer title='Auto Generateg' className='text-lg -mx-1' />
-                                            )}
-                                            info='SKU Kode adalah kode kustom yang ada dibuat oleh retail untuk mengelola bahan dan traking barang'
-                                        />
-                                    )}
-                                />
+                            <Button className='w-full bg-gray-700 mt-4' size='sm'>Unggah Foto</Button>
+                        </div>
+                        <div className='w-full col-span-10 grid grid-cols-12 gap-x-2'>
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormInputField field={field} label='Nama' placeholder='Masukan nama produk' required />
+                                )}
+                            />
 
-                                <FormField
-                                    control={form.control}
-                                    name="upc"
-                                    render={({ field }) => (
-                                        <FormInput field={field} label='UPC'
-                                            type='number'
-                                            placeholder='Kode UPC'
-                                            info={(
-                                                <div>
-                                                    <p>UPC Kode adalah barcode yang biasa ditemukan di produk</p>
-                                                    <p className='mt-2'>Gunakan scanner untuk autoinput kode UPC</p>
-                                                </div>
-                                            )}
-                                        />
-                                    )}
-                                />
+                            <FormField
+                                control={form.control}
+                                name="sku"
+                                render={({ field }) => (
+                                    <FormInputField 
+                                        field={field} 
+                                        label='SKU' 
+                                        placeholder='Kode SKU' 
+                                        required
+                                        buttonOnclick={() => {
+                                            form.setValue('sku', Math.random().toString())
+                                        }}
+                                        button={(
+                                            <FaAutoprefixer title='Auto Generateg' className='text-lg -mx-1' />
+                                        )}
+                                        info='SKU Kode adalah kode kustom yang ada dibuat oleh retail untuk mengelola bahan dan traking barang'
+                                    />
+                                )}
+                            />
 
-                                <FormField
-                                    control={form.control}
-                                    name="price"
-                                    rules={{
-                                        onChange: e => console.log(e)
-                                    }}
-                                    render={({ field }) => (
-                                        <FormInput field={field} label='Harga' placeholder='Harga produk' type='number' />
-                                    )}
-                                />
-                            </div>
-                        </form>
+                            <FormField
+                                control={form.control}
+                                name="upc"
+                                render={({ field }) => (
+                                    <FormInputField field={field} label='UPC'
+                                        type='number'
+                                        placeholder='Kode UPC'
+                                        info={(
+                                            <div>
+                                                <p>UPC Kode adalah barcode yang biasa ditemukan di produk</p>
+                                                <p className='mt-2'>Gunakan scanner untuk autoinput kode UPC</p>
+                                            </div>
+                                        )}
+                                    />
+                                )}
+                            />
 
-                        <BarcodeReader
-                            onError={(barcode, msg) => {
-                                console.error(barcode, msg);
-                            }}
-                            onScan={(barcode) => {
-                                form.setValue('upc', Number(barcode))
-                            }}
-                        />
-                    </Form>
-                </main>
-            </TooltipProvider>
-        </DashLayout>
-    )
-}
+                            <FormField
+                                control={form.control}
+                                name="price"
+                                rules={{
+                                    onChange: e => console.log(e)
+                                }}
+                                render={({ field }) => (
+                                    <FormInputField field={field} label='Harga' placeholder='Harga produk' type='number' />
+                                )}
+                            />
+                        </div>
+                    </form>
 
-
-function FormInput({ field, description, info, button, label, buttonOnclick, required, ...props }: InputHTMLAttributes<{}> & {
-    field: ControllerRenderProps<any>
-    description?: string
-    label?: string
-    info?: string | JSX.Element
-    button?: string | JSX.Element
-    buttonOnclick?: () => void
-}) {
-    return (
-        <FormItem className='col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3 space-y-0.5'>
-            {label && (
-                <FormLabel>
-                    {label}
-                    {required && (<sup className='text-destructive' title='* berarti input wajib diisi'>*</sup>)}
-                    {info && (
-                        <Tooltip>
-                            <TooltipTrigger tabIndex={-1}>
-                                <PiInfo className='inline-block ml-2' />
-                            </TooltipTrigger>
-                            <TooltipContent className='max-w-sm font-normal' side='bottom'>
-                                {typeof info === 'string' ? (<p>{info}</p>) : info}
-                            </TooltipContent>
-                        </Tooltip>
-                    )}
-                </FormLabel>
-            )}
-            {description && (
-                <FormDescription className='!-mt-1 !mb-1'>{description}</FormDescription>
-            )}
-            <div className='flex'>
-                <FormControl>
-                    <Input {...field}
-                        value={field.value ?? ''}
-                        {...props}
-                        className={cn({
-                            'rounded-r-none': button
-                        })}
+                    <BarcodeReader
+                        onError={(barcode, msg) => {
+                            console.error(barcode, msg);
+                        }}
+                        onScan={(barcode) => {
+                            form.setValue('upc', Number(barcode))
+                        }}
                     />
-                </FormControl>
-                {button && (
-                    <Button type='button' className='rounded-l-none border-l-0' variant='outline' onClick={buttonOnclick}>
-                        {button}
-                    </Button>
-                )}
-            </div>
-            <FormMessage />
-        </FormItem>
+                </Form>
+            </main>
+        </DashLayout>
     )
 }

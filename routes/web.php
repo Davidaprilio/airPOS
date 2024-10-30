@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\Admin;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,8 +27,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::prefix('/stores')->group(function() {
+        Route::get('/', [Admin\StoreController::class, 'index'])->name('store.index');
+        Route::get('/detail/{product_id}', [Admin\StoreController::class, 'show'])->name('store.show');
+        Route::get('/create', [Admin\StoreController::class, 'create'])->name('store.create');
+        Route::post('/create', [Admin\StoreController::class, 'store']);
+    });
+
     Route::prefix('/products')->group(function() {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
+        Route::get('/detail/{product_id}', [ProductController::class, 'show'])->name('product.show');
         Route::get('/create', [ProductController::class, 'create'])->name('product.create');
         Route::post('/create', [ProductController::class, 'store']);
     });
