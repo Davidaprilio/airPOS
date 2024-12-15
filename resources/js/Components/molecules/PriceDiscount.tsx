@@ -7,7 +7,7 @@ export default function PriceDiscount({value, discount, currency = 'Rp'}: {
 }) {
     return (
         <>
-            <Price value={value} currency={currency} lineThrough={discount !== undefined} />
+            <Price value={value} currency={currency} lineThrough={discount !== undefined} short={discount !== undefined} />
             {discount && (
                 <Price value={discount} currency={currency} />
             )}

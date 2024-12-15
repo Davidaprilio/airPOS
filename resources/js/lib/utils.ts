@@ -17,3 +17,28 @@ export function textEllipses(text: string, max: number, ellipses: string = '...'
 {
     return text.substring(0,max-1)+(text.length>max?ellipses:''); 
 }
+
+export function shortNum(num: number) 
+{
+    const formats = [
+        {unit: 1_000_000_000, symbol: 'B'},
+        {unit: 1_000_000, symbol: 'jt'},
+        {unit: 1_000, symbol: 'k'},
+        {unit: 1, symbol: ''},
+    ]
+    let n = 0
+    let symbol = ''
+    for (const format of formats) {
+        if (num > format.unit) {
+            n = num / format.unit
+            symbol = format.symbol
+            break
+        }
+    }
+
+    let str = n.toFixed(2)
+    if (str.includes('.0')) {
+        str = str.split('.0')[0]
+    }
+    return str + symbol
+}

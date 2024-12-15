@@ -10,6 +10,7 @@ interface InitialState {
     cart: Map<string, POSCartStore>
     loading: boolean
     error: null|string
+    lastEditedItem: [(null|POSCartStore['productId']), number]
 
     addToCart: (productId: string) => void 
     updateQtyFromCart: (productId: string, mode?: 'increment'|'decrement', step?: number) => boolean 
@@ -23,13 +24,23 @@ const usePOSCartStore = create<InitialState>((set, get) => {
         const cart = get().cart
         if (cart.has(productId)) {
             const product = cart.get(productId)!
+            let qty = product.qty
             if (mode === 'increment') {
-                product.qty += step
+                qty += step
             } else {
-                product.qty -= step
+                qty -= step
             }
+
+            if (qty > 0) {
+                product.qty = qty
+            }
+
             cart.set(productId, product)
-            set((state) => ({ ...state, cart }))
+            set((state) => ({ 
+                ...state,
+                cart,
+                lastEditedItem: [productId, qty],
+            }))
             return true
         }
         return false
@@ -60,6 +71,7 @@ const usePOSCartStore = create<InitialState>((set, get) => {
         cart: new Map(),
         loading: false,
         error: null,
+        lastEditedItem: [null,0],
         
         // method
         addToCart,

@@ -1,7 +1,6 @@
 import BillCard from "@/Components/organisms/cards/BillCard";
 import { Button } from "@/Components/ui/button";
 import { ScrollArea } from "@/Components/ui/scroll-area";
-import { arrFrom } from "@/lib/utils";
 import CartItemCard from "@/Components/pos/organisms/CartItemCard";
 import { HiOutlineTrash } from "react-icons/hi2";
 import { LiaSave } from "react-icons/lia";
@@ -13,7 +12,7 @@ export default function SideBarCart() {
     const { cart } = usePOSCartStore()
 
     return (
-        <div className="border-l min-w-[350px] px-5 py-3 relative flex flex-col pb-10 bg-white">
+        <div className="border-l min-w-[330px] px-5 py-3 relative flex flex-col pb-10 bg-white">
             <div className="flex justify-between mb-2">
                 <Tooltip delayDuration={100}>
                     <TooltipTrigger>
@@ -39,7 +38,7 @@ export default function SideBarCart() {
                 </Tooltip>
             </div>
 
-            <ScrollArea scrollHideDelay={200} className="mb-5 pr-4 -mr-4">
+            <ScrollArea scrollHideDelay={200} className="mb-5 pr-4 -mr-4 shadow-scroll">
                 <div className="flex flex-col gap-y-2 w-full">
                     {Array.from(cart, ([id, item], i) => (
                         <CartItemCard key={i} item={item} />

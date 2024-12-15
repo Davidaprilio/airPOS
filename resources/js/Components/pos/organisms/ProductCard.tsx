@@ -1,13 +1,12 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/Components/ui/alert-dialog";
 import { Button } from "@/Components/ui/button";
-import { cn, textEllipses } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import usePOSCartStore from "@/states/store/usePOSCartStore";
-import { IconType } from "react-icons";
-import { FaMinus, FaPlus } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
-import { Dialog, dialogState, useDialog } from "../templates/Dialog";
+import { Dialog, dialogState } from "../templates/Dialog";
 import { BsCartX } from "react-icons/bs";
 import Price from "@/Components/atoms/Price";
+import Counter from "@/Components/organisms/forms/Counter";
 
 type ProductCardProps = {
     id: string
@@ -19,14 +18,13 @@ type ProductCardProps = {
 }
 
 export default function ProductCard({ id, currency = 'Rp', price, name, unit, img }: ProductCardProps) {
-    const { addToCart, updateQtyFromCart, removeFromCart, cart } = usePOSCartStore()
-    const { dialog } = useDialog()
+    const { addToCart, updateQtyFromCart, cart } = usePOSCartStore()
 
     const isAddedToCart = cart.has(id)
     const item = cart.get(id)
 
     return (
-        <div className={cn("p-2 w-44 h-full rounded-xl shadow-lg border border-gray-200 bg-white relative z-0 cursor-default flex flex-col", {
+        <div className={cn("p-2 min-w-44 h-full rounded-xl shadow-lg border border-gray-200 bg-white relative z-0 cursor-default flex flex-col", {
             "border-primary": isAddedToCart
         })}>
             <Dialog />
@@ -35,7 +33,7 @@ export default function ProductCard({ id, currency = 'Rp', price, name, unit, im
             </figure>
             <div className="pt-2 flex flex-col h-full justify-between">
                 <div>
-                    <p className="text-sm font-medium text-center max-h-10 text-ellipsis overflow-hidden">{textEllipses(name, 43)}</p>
+                    <p className="text-sm font-medium text-center max-h-10 max-w-max text-ellipsis line-clamp-2 overflow-hidden">{name}</p>
                 </div>
                 <div>
                     <div className="text-xs py-2">
@@ -45,16 +43,7 @@ export default function ProductCard({ id, currency = 'Rp', price, name, unit, im
 
                     {item ? (
                         <div className="bg-gray-100 p-1 rounded-lg">
-                            <Counter value={item.qty} onChange={type => {
-                                if (item.qty <= 1 && type === 'decrement') {
-                                    return dialog(true, (
-                                        <DialogConfirmRemove
-                                            onConfirm={() => {removeFromCart(id)}}
-                                        />
-                                    ))
-                                }
-                                updateQtyFromCart(id, type)
-                            }} />
+                            <Counter value={item.qty} onChange={type => {updateQtyFromCart(id, type)}} />
                         </div>
                     ) : (
                         <Button
@@ -70,28 +59,9 @@ export default function ProductCard({ id, currency = 'Rp', price, name, unit, im
     )
 }
 
-function Counter({ value, onChange }: {
-    value: number
-    onChange: (type: 'increment' | 'decrement') => void
-}) {
-    return (
-        <div className="flex items-center w-full justify-between">
-            <CounterBtn Icon={FaMinus} onClick={() => onChange('decrement')} />
-            <div className="text-center border-b-2 px-2 border-primary">{value}</div>
-            <CounterBtn Icon={FaPlus} onClick={() => onChange('increment')} />
-        </div>
-    )
-}
-
-function CounterBtn({ Icon, onClick }: { Icon: IconType, onClick: () => void }) {
-    return (
-        <Button variant='outline' className="w-7 h-7 p-0 text-gray-800 bg-primary text-primary-foreground hover:bg-primary/80 hover:text-white" onClick={onClick}>
-            <Icon />
-        </Button>
-    )
-}
-
-export function DialogConfirmRemove({onConfirm}: {
+export function DialogConfirmRemove({onConfirm, title, description}: {
+    title?: string
+    description?: string
     onConfirm?: () => void
 }) {
     const [open, setOpen] = useRecoilState(dialogState);
@@ -102,10 +72,10 @@ export function DialogConfirmRemove({onConfirm}: {
                 <AlertDialogHeader>
                     <BsCartX className="mx-auto text-4xl mb-3" />
                     <AlertDialogTitle className="text-center">
-                        Drop from Cart?
+                        {title ?? 'Drop from Cart?'}
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-center">
-                        drop this item from cart?
+                        {description??'drop this item from cart?'}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="justify-center sm:justify-center">

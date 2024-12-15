@@ -23,6 +23,7 @@ import SideBarCart from "@/Components/pos/templates/SideBarCart"
 import { TooltipProvider } from "@/Components/ui/tooltip"
 import ProductCard from "@/Components/pos/organisms/ProductCard"
 import { products } from "@/states/store/dataPOS"
+import DialogRemoveItemCart from "@/Components/pos/organisms/DialogRemoveItemCart"
 
 
 export default function Main() {
@@ -30,17 +31,18 @@ export default function Main() {
         <TooltipProvider>
             <div className="relative h-screen">
                 <TopBar />
-                <div className="flex h-full pt-12 bg-zinc-50">
+                <div className="flex h-full pt-12 bg-zinc-50 max-w-screen-2xl mx-auto">
                     <div className="pt-2 overflow-hiddens w-full">
                         <div className="flex px-12">
                             <MenubarDemo />
                         </div>
-                        <ScrollArea scrollHideDelay={200} className="h-[calc(100vh-96px)] px-10 pt-3 z-0">
+                        <ScrollArea scrollHideDelay={200} className="h-[calc(100vh-96px)] px-5 md:px-10 pt-3 z-0">
                             <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-zinc-100 to-transparent from-70% to-100% w-full h-5 z-30"></div>
+                            <DialogRemoveItemCart />
 
-                            <div className="w-full flex flex-row flex-wrap mb-4">
+                            <div className="w-full mb-4 grid md:grid-cols-2 lg:grid-cols-3 md2: 2lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
                                 {products.map((product, i) => (
-                                    <div className="p-2" key={i} >
+                                    <div className="p-2 col-span-1" key={i} >
                                         <ProductCard 
                                             id={product.id}
                                             name={product.name}
