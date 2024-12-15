@@ -21,26 +21,27 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
         );
 
+        $password = Hash::make('password');
         // User::factory(10)->create();
         User::create([
             'name' => 'SuperAdmin',
-            'email' => 'admin@airpos.my.id',
+            'email' => 'admin@example.com',
             'email_verified_at' => $now,
-            'password' => Hash::make('admin!@#123')
+            'password' => $password,
         ]);
         
         $owner = User::create([
             'name' => 'Jhon Doe',
             'email' => 'jhon@example.com',
             'email_verified_at' => $now,
-            'password' => Hash::make('jhon!@#123')
+            'password' => $password,
         ]);
 
         $cashier = User::create([
             'name' => 'Cashier1',
             'email' => 'cashier@example.com',
             'email_verified_at' => $now,
-            'password' => Hash::make('cashier!@#123')
+            'password' => $password,
         ]);
 
         $owner->assignRole('busines-owner');

@@ -49,7 +49,7 @@ export default function Create() {
                 </div>
 
                 <Form {...form} onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="mt-10 grid grid-cols-12 gap-5">
+                    <div className="mt-10 grid grid-cols-10 gap-5 bg-neutral-50 border rounded-lg p-5">
                         <FormField control={form.control} name="name" render={({ field }) => (
                             <FormInputField field={field}
                                 label='Nama'
@@ -59,12 +59,33 @@ export default function Create() {
                             />
                         )}/>
                         
+
+                        <div className="col-span-full">
+                            <h2>Informasi tambahan</h2>
+                            <hr />
+                        </div>
+
+                        <FormField control={form.control} name="price" render={({ field }) => (
+                            <FormInputField field={field}
+                                label='Biaya Oprasional'
+                                placeholder='Alamat Toko'
+                            />
+                        )}/>
+
+                        <FormField control={form.control} name="price" render={({ field }) => (
+                            <FormInputField field={field}
+                                label='Jam oprasional'
+                                placeholder=''
+                            />
+                        )}/>
+
                         <FormField control={form.control} name="price" render={({ field }) => (
                             <FormInputField field={field}
                                 label='Alamat'
                                 placeholder='Alamat Toko'
                             />
                         )}/>
+
                     </div>
                 </Form>
             </div>
